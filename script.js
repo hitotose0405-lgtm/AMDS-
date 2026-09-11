@@ -1,105 +1,96 @@
-/* =====================================================
-   診断サイト JavaScript
-===================================================== */
+/* =========================
+   星詠み研究所
+   メインプログラム
+========================= */
 
 
-/* =====================================================
-   現在選択されているカテゴリー
-===================================================== */
+/* =========================
+   診断結果データ
+========================= */
 
-let currentCategory = "A";
+const diagnosisData = [
+  {
+    type: "星の探究者",
 
+    text:
+      "あなたは、物事を深く考え、自分自身の答えを見つけていく力を持っています。静かな時間の中で、本来の才能が輝くタイプです。",
 
-/* =====================================================
-   入力された情報
-===================================================== */
+    feature:
+      "感受性が豊かで、周囲の変化を敏感に感じ取ります。一度興味を持ったことには、とことん向き合う集中力があります。",
 
-let userData = {
-
-  name: "",
-
-  date: "",
-
-  option: ""
-
-};
-
-
-/* =====================================================
-   A〜Dの診断結果
-===================================================== */
-
-const diagnosisData = {
-
-  A: {
-
-    title: "あなたは素晴らしい可能性を持っています",
-
-    score: 85,
-
-    description:
-      "あなたには独自の魅力と可能性があります。自分自身の感覚を大切にしながら、あなたらしい道を進んでいくことで、さらに大きな可能性が開いていくでしょう。",
-
+    message:
+      "焦らず、自分の歩幅で進んでください。あなたが選んだ道には、まだ見えていない星がたくさん輝いています。"
   },
 
+  {
+    type: "月影の導き手",
 
-  B: {
+    text:
+      "あなたは、人の気持ちや空気を感じ取る優れた感性を持っています。誰かの心をそっと照らすことのできる人です。",
 
-    title: "あなたは人を惹きつける魅力があります",
+    feature:
+      "共感力が高く、相手の立場を考えて行動できます。あなたの優しさは、周囲の人に安心感を与えています。",
 
-    score: 92,
-
-    description:
-      "あなたには周囲の人を自然と惹きつける魅力があります。自分の考えや感性を表現することで、思いがけない出会いやチャンスにつながっていくでしょう。",
-
+    message:
+      "すべての人を照らす必要はありません。まずは自分自身の心にも、優しい光を向けてください。"
   },
 
+  {
+    type: "太陽の開拓者",
 
-  C: {
+    text:
+      "あなたは、自分で道を切り開いていく強さを持っています。新しいことに挑戦するほど、眠っていた才能が目を覚ますタイプです。",
 
-    title: "あなたには強い直感力があります",
+    feature:
+      "行動力があり、思い立ったら動ける人です。周囲を巻き込み、物事を前に進めるエネルギーがあります。",
 
-    score: 78,
-
-    description:
-      "あなたは物事の本質を感覚的に捉える力を持っています。頭で考えすぎず、自分の中に浮かんだ感覚を大切にすると、進むべき方向が見えてくるでしょう。",
-
+    message:
+      "完璧な準備を待つ必要はありません。一歩踏み出した先で、次の星があなたを導いてくれます。"
   },
 
+  {
+    type: "星海の旅人",
 
-  D: {
+    text:
+      "あなたは、自由な発想と豊かな想像力を持っています。決められた道より、自分だけの道を探すことで才能が輝きます。",
 
-    title: "あなたは未来を切り開く力があります",
+    feature:
+      "好奇心が強く、新しい世界を知ることを楽しめます。普通とは違う視点から物事を見る力があります。",
 
-    score: 96,
-
-    description:
-      "あなたには、自分で未来を切り開いていく力があります。小さな一歩を積み重ねることで、大きな変化を生み出せるタイプです。自信を持って進んでください。",
-
+    message:
+      "遠回りに見える道も、あなたにとっては必要な旅です。自分の感覚を信じて進んでください。"
   }
-
-};
-
-
-/* =====================================================
-   画面を切り替える
-===================================================== */
-
-function showScreen(screenId) {
-
-  const screens =
-    document.querySelectorAll(".screen");
+];
 
 
-  screens.forEach(function(screen) {
+/* =========================
+   現在の診断結果
+========================= */
 
-    screen.classList.remove("active");
+let currentResult = null;
 
-  });
+let currentName = "";
+
+
+/* =========================
+   画面切り替え
+========================= */
+
+function showPage(pageNumber) {
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+
+      page.classList.remove("active");
+
+    });
 
 
   const target =
-    document.getElementById(screenId);
+    document.getElementById(
+      "page" + pageNumber
+    );
 
 
   if (target) {
@@ -109,335 +100,562 @@ function showScreen(screenId) {
   }
 
 
-  // ページ上部へ戻す
-
   window.scrollTo({
-
     top: 0,
-
     behavior: "smooth"
-
   });
-
 }
 
 
-/* =====================================================
-   A〜Dを選択
-===================================================== */
+/* =========================
+   A1 → A2
+   診断開始
+========================= */
 
-function startCategory(category) {
-
-  currentCategory = category;
-
-
-  // A1 / B1 / C1 / D1
-
-  document.getElementById(
-    "input-category"
-  ).textContent = category;
-
-
-  // タイトル
-
-  document.getElementById(
-    "input-title"
-  ).textContent =
-    category + "の情報入力";
-
-
-  // 入力画面へ
-
-  showScreen("screen-input");
-
-}
-
-
-/* =====================================================
-   結果を表示
-===================================================== */
-
-function showResult() {
-
-  // 入力値を取得
+function startDiagnosis() {
 
   const name =
-    document.getElementById(
-      "user-name"
-    ).value.trim();
+    document
+      .getElementById("name")
+      .value
+      .trim();
 
 
-  const date =
-    document.getElementById(
-      "user-date"
-    ).value;
+  const birthday =
+    document
+      .getElementById("birthday")
+      .value;
 
-
-  const option =
-    document.getElementById(
-      "user-option"
-    ).value.trim();
-
-
-  // 名前が空の場合
 
   if (!name) {
 
-    alert(
-      "お名前を入力してください。"
-    );
+    alert("お名前を入力してください。");
 
     return;
-
   }
 
 
-  // データ保存
+  if (!birthday) {
 
-  userData.name = name;
-
-  userData.date = date;
-
-  userData.option = option;
-
-
-  // 診断データ取得
-
-  const data =
-    diagnosisData[currentCategory];
-
-
-  /* =========================
-     結果画面を書き換える
-  ========================== */
-
-  document.getElementById(
-    "result-category"
-  ).textContent =
-    currentCategory;
-
-
-  document.getElementById(
-    "result-letter"
-  ).textContent =
-    currentCategory;
-
-
-  document.getElementById(
-    "result-score"
-  ).textContent =
-    data.score;
-
-
-  document.getElementById(
-    "result-title"
-  ).textContent =
-    data.title;
-
-
-  document.getElementById(
-    "result-description"
-  ).textContent =
-    data.description;
-
-
-  document.getElementById(
-    "display-name"
-  ).textContent =
-    name;
-
-
-  document.getElementById(
-    "display-type"
-  ).textContent =
-    currentCategory;
-
-
-  document.getElementById(
-    "result-name"
-  ).textContent =
-    name + "さんの診断結果";
-
-
-  // A2 / B2 / C2 / D2
-
-  document.getElementById(
-    "result-category"
-  ).textContent =
-    currentCategory;
-
-
-  // 結果画面へ
-
-  showScreen("screen-result");
-
-}
-
-
-/* =====================================================
-   A2 → A3
-===================================================== */
-
-async function goToImage() {
-
-  const resultCard =
-    document.getElementById(
-      "result-card"
-    );
-
-
-  // ボタンなどを押す前に少し待つ
-
-  await new Promise(
-    function(resolve) {
-
-      setTimeout(
-        resolve,
-        100
-      );
-
-    }
-  );
-
-
-  try {
-
-    /*
-      html2canvasを使って
-      結果カードを画像化
-    */
-
-    const canvas =
-      await html2canvas(
-        resultCard,
-        {
-
-          scale: 2,
-
-          backgroundColor:
-            "#f7eff9",
-
-          useCORS: true,
-
-          logging: false
-
-        }
-      );
-
-
-    // PNG画像に変換
-
-    const imageData =
-      canvas.toDataURL(
-        "image/png"
-      );
-
-
-    // A3 / B3 / C3 / D3
-
-    document.getElementById(
-      "image-category"
-    ).textContent =
-      currentCategory;
-
-
-    // 画像表示
-
-    document.getElementById(
-      "result-image"
-    ).src =
-      imageData;
-
-
-    // 画像保存画面へ
-
-    showScreen(
-      "screen-image"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "画像の作成に失敗しました。もう一度お試しください。"
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   画像を保存
-===================================================== */
-
-function downloadImage() {
-
-  const image =
-    document.getElementById(
-      "result-image"
-    );
-
-
-  // 画像がない場合
-
-  if (!image.src) {
-
-    alert(
-      "保存する画像がありません。"
-    );
+    alert("生年月日を入力してください。");
 
     return;
-
   }
+
+
+  currentName = name;
 
 
   /*
-    ダウンロード用リンクを作る
+    生年月日から簡易的に
+    結果を決定します。
   */
 
-  const link =
-    document.createElement("a");
+  const date =
+    new Date(birthday);
 
 
-  link.href =
-    image.src;
+  const number =
+    date.getFullYear() +
+    date.getMonth() +
+    date.getDate();
 
 
-  link.download =
-    "diagnosis-" +
-    currentCategory +
-    "-result.png";
+  const index =
+    Math.abs(number)
+    % diagnosisData.length;
 
 
-  document.body.appendChild(
-    link
-  );
+  currentResult =
+    diagnosisData[index];
 
 
-  link.click();
+  /*
+    A2へ結果を表示
+  */
+
+  document
+    .getElementById("resultName")
+    .textContent =
+      currentName;
 
 
-  document.body.removeChild(
-    link
-  );
+  document
+    .getElementById("resultType")
+    .textContent =
+      currentResult.type;
 
+
+  document
+    .getElementById("resultText")
+    .textContent =
+      currentResult.text;
+
+
+  document
+    .getElementById("featureText")
+    .textContent =
+      currentResult.feature;
+
+
+  document
+    .getElementById("messageText")
+    .textContent =
+      currentResult.message;
+
+
+  showPage(2);
 }
 
 
-/* =====================================================
-   初期状態
-===================================================== */
+/* =========================
+   A2 → A3
+   保存用画像を作成
+========================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
+function showSavePage() {
 
-    showScreen(
-      "screen-list"
+  if (!currentResult) {
+
+    return;
+  }
+
+
+  createResultImage();
+
+
+  showPage(3);
+}
+
+
+/* =========================
+   保存用画像を作る
+========================= */
+
+function createResultImage() {
+
+  const canvas =
+    document.getElementById(
+      "resultCanvas"
+    );
+
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  /*
+    保存画像サイズ
+
+    縦長なので
+    InstagramやSNSにも
+    使用しやすい比率です。
+  */
+
+  const width = 1080;
+
+  const height = 1350;
+
+
+  canvas.width = width;
+
+  canvas.height = height;
+
+
+  /* =====================
+     背景
+  ===================== */
+
+  const background =
+    ctx.createLinearGradient(
+      0,
+      0,
+      0,
+      height
+    );
+
+
+  background.addColorStop(
+    0,
+    "#090b1d"
+  );
+
+  background.addColorStop(
+    0.5,
+    "#171b43"
+  );
+
+  background.addColorStop(
+    1,
+    "#080a19"
+  );
+
+
+  ctx.fillStyle =
+    background;
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  /* =====================
+     星
+  ===================== */
+
+  const stars = [
+    [100, 130, 4],
+    [230, 220, 3],
+    [880, 160, 4],
+    [970, 300, 3],
+    [120, 520, 3],
+    [930, 570, 4],
+    [180, 950, 3],
+    [880, 1000, 3],
+    [100, 1160, 4],
+    [960, 1200, 3]
+  ];
+
+
+  stars.forEach(star => {
+
+    ctx.beginPath();
+
+    ctx.arc(
+      star[0],
+      star[1],
+      star[2],
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle =
+      "#f1d27a";
+
+    ctx.fill();
+
+  });
+
+
+  /* =====================
+     外枠
+  ===================== */
+
+  ctx.strokeStyle =
+    "#d9b75c";
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeRect(
+    45,
+    45,
+    width - 90,
+    height - 90
+  );
+
+
+  /* =====================
+     タイトル
+  ===================== */
+
+  ctx.textAlign = "center";
+
+
+  ctx.fillStyle =
+    "#f1d27a";
+
+  ctx.font =
+    "bold 42px sans-serif";
+
+
+  ctx.fillText(
+    "✦ 星詠み研究所 ✦",
+    width / 2,
+    130
+  );
+
+
+  /* =====================
+     診断結果
+  ===================== */
+
+  ctx.fillStyle =
+    "#ffffff";
+
+  ctx.font =
+    "bold 32px sans-serif";
+
+
+  ctx.fillText(
+    currentName + "さんの星",
+    width / 2,
+    210
+  );
+
+
+  /* =====================
+     星マーク
+  ===================== */
+
+  ctx.fillStyle =
+    "#f1d27a";
+
+  ctx.font =
+    "100px serif";
+
+
+  ctx.fillText(
+    "✦",
+    width / 2,
+    350
+  );
+
+
+  /* =====================
+     タイプ
+  ===================== */
+
+  ctx.fillStyle =
+    "#f4dc92";
+
+  ctx.font =
+    "bold 52px sans-serif";
+
+
+  ctx.fillText(
+    currentResult.type,
+    width / 2,
+    450
+  );
+
+
+  /* =====================
+     区切り線
+  ===================== */
+
+  ctx.strokeStyle =
+    "rgba(255,255,255,0.3)";
+
+  ctx.lineWidth = 2;
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    150,
+    500
+  );
+
+  ctx.lineTo(
+    930,
+    500
+  );
+
+  ctx.stroke();
+
+
+  /* =====================
+     本文
+  ===================== */
+
+  ctx.fillStyle =
+    "#eeeeee";
+
+  ctx.font =
+    "28px sans-serif";
+
+
+  drawWrappedText(
+    ctx,
+    currentResult.text,
+    width / 2,
+    570,
+    800,
+    50
+  );
+
+
+  /* =====================
+     特徴
+  ===================== */
+
+  ctx.fillStyle =
+    "#e9d48b";
+
+  ctx.font =
+    "bold 30px sans-serif";
+
+
+  ctx.fillText(
+    "あなたの特徴",
+    width / 2,
+    780
+  );
+
+
+  ctx.fillStyle =
+    "#dddddd";
+
+  ctx.font =
+    "26px sans-serif";
+
+
+  drawWrappedText(
+    ctx,
+    currentResult.feature,
+    width / 2,
+    835,
+    800,
+    48
+  );
+
+
+  /* =====================
+     メッセージ
+  ===================== */
+
+  ctx.fillStyle =
+    "#e9d48b";
+
+  ctx.font =
+    "bold 30px sans-serif";
+
+
+  ctx.fillText(
+    "星からのメッセージ",
+    width / 2,
+    1050
+  );
+
+
+  ctx.fillStyle =
+    "#dddddd";
+
+  ctx.font =
+    "26px sans-serif";
+
+
+  drawWrappedText(
+    ctx,
+    currentResult.message,
+    width / 2,
+    1105,
+    800,
+    48
+  );
+
+
+  /* =====================
+     コピーライト
+  ===================== */
+
+  ctx.fillStyle =
+    "#aaaabb";
+
+  ctx.font =
+    "22px sans-serif";
+
+
+  ctx.fillText(
+    "星詠み研究所",
+    width / 2,
+    1280
+  );
+
+
+  /*
+    Canvas → PNG画像
+
+    A3で普通の<img>として表示するため、
+    data URLに変換します。
+  */
+
+  const image =
+    document.getElementById(
+      "saveImage"
+    );
+
+
+  image.src =
+    canvas.toDataURL(
+      "image/png"
+    );
+}
+
+
+/* =========================
+   Canvasの文章折り返し
+========================= */
+
+function drawWrappedText(
+  ctx,
+  text,
+  centerX,
+  startY,
+  maxWidth,
+  lineHeight
+) {
+
+  let line = "";
+
+  let y = startY;
+
+
+  for (
+    let i = 0;
+    i < text.length;
+    i++
+  ) {
+
+    const testLine =
+      line + text[i];
+
+
+    const metrics =
+      ctx.measureText(
+        testLine
+      );
+
+
+    if (
+      metrics.width >
+      maxWidth &&
+      line !== ""
+    ) {
+
+      ctx.fillText(
+        line,
+        centerX,
+        y
+      );
+
+
+      line =
+        text[i];
+
+
+      y += lineHeight;
+
+    } else {
+
+      line =
+        testLine;
+
+    }
+
+  }
+
+
+  if (line) {
+
+    ctx.fillText(
+      line,
+      centerX,
+      y
     );
 
   }
-);
+}
