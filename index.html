@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>診断サイト</title>
+  <title>星詠み研究所</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,307 +12,177 @@
 <body>
 
   <!-- =========================
-       サイト全体
+       A1：情報入力画面
   ========================== -->
+  <section id="page1" class="page active">
 
-  <main class="app">
+    <div class="container">
 
-    <!-- =========================
-         一覧画面
-    ========================== -->
-
-    <section id="screen-list" class="screen active">
-
-      <div class="header">
-        <p class="sub-title">YOUR DIAGNOSIS</p>
-        <h1>一覧</h1>
-        <p class="description">
-          診断したい項目を選択してください
-        </p>
+      <div class="logo">
+        ✦ 星詠み研究所 ✦
       </div>
 
-      <div class="category-list">
+      <h1>あなたの星詠み診断</h1>
 
-        <button class="category-card" onclick="startCategory('A')">
-          <span class="category-letter">A</span>
-          <span class="category-name">Aの診断</span>
-          <span class="arrow">›</span>
-        </button>
+      <p class="lead">
+        あなたの情報を入力してください
+      </p>
 
-        <button class="category-card" onclick="startCategory('B')">
-          <span class="category-letter">B</span>
-          <span class="category-name">Bの診断</span>
-          <span class="arrow">›</span>
-        </button>
+      <div class="form-box">
 
-        <button class="category-card" onclick="startCategory('C')">
-          <span class="category-letter">C</span>
-          <span class="category-name">Cの診断</span>
-          <span class="arrow">›</span>
-        </button>
-
-        <button class="category-card" onclick="startCategory('D')">
-          <span class="category-letter">D</span>
-          <span class="category-name">Dの診断</span>
-          <span class="arrow">›</span>
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
-         A1〜D1 入力画面
-    ========================== -->
-
-    <section id="screen-input" class="screen">
-
-      <div class="header">
-
-        <button class="back-button" onclick="showScreen('screen-list')">
-          ← 一覧に戻る
-        </button>
-
-        <p class="step">STEP 1 / 3</p>
-
-        <h1>
-          <span id="input-category">A</span>1
-        </h1>
-
-        <h2 id="input-title">
-          情報入力
-        </h2>
-
-        <p class="description">
-          必要な情報を入力してください
-        </p>
-
-      </div>
-
-
-      <div class="form-card">
-
-        <label for="user-name">
+        <label for="name">
           お名前
         </label>
 
         <input
           type="text"
-          id="user-name"
-          placeholder="お名前を入力してください"
+          id="name"
+          placeholder="例：星野 花子"
         >
 
-
-        <label for="user-date">
+        <label for="birthday">
           生年月日
         </label>
 
         <input
           type="date"
-          id="user-date"
+          id="birthday"
         >
-
-
-        <label for="user-option">
-          その他の情報
-        </label>
-
-        <textarea
-          id="user-option"
-          placeholder="自由に入力してください"
-        ></textarea>
-
 
         <button
-          class="primary-button"
-          onclick="showResult()"
+          class="main-button"
+          onclick="startDiagnosis()"
         >
-          結果を見る
+          星を詠む
         </button>
 
       </div>
 
-    </section>
+    </div>
+
+  </section>
 
 
-    <!-- =========================
-         A2〜D2 結果画面
-    ========================== -->
+  <!-- =========================
+       A2：診断結果表示画面
+  ========================== -->
+  <section id="page2" class="page">
 
-    <section id="screen-result" class="screen">
+    <div class="container">
 
-      <div class="header">
+      <div class="logo">
+        ✦ 星詠み研究所 ✦
+      </div>
 
-        <p class="step">STEP 2 / 3</p>
+      <h1>診断結果</h1>
 
-        <h1>
-          <span id="result-category">A</span>2
-        </h1>
+      <div class="result-card">
 
-        <h2>
-          診断結果
+        <p class="result-name">
+          <span id="resultName"></span>さんの星
+        </p>
+
+        <div class="star-symbol">
+          ✦
+        </div>
+
+        <h2 id="resultType">
+          星の探究者
         </h2>
+
+        <p id="resultText" class="result-text">
+          あなたは、物事を深く考え、
+          自分の答えを見つけていく力を持っています。
+        </p>
+
+        <div class="result-section">
+          <h3>あなたの特徴</h3>
+
+          <p id="featureText">
+            感受性が豊かで、
+            周囲の変化を敏感に感じ取るタイプです。
+          </p>
+        </div>
+
+        <div class="result-section">
+          <h3>星からのメッセージ</h3>
+
+          <p id="messageText">
+            焦らず、自分の歩幅で進んでください。
+            あなたが選んだ道には意味があります。
+          </p>
+        </div>
 
       </div>
 
+      <button
+        class="main-button"
+        onclick="showSavePage()"
+      >
+        結果を画像で保存する
+      </button>
+
+      <button
+        class="sub-button"
+        onclick="showPage(1)"
+      >
+        もう一度診断する
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       A3：画像保存画面
+  ========================== -->
+  <section id="page3" class="page">
+
+    <div class="container">
+
+      <div class="logo">
+        ✦ 星詠み研究所 ✦
+      </div>
+
+      <h1>保存用画像</h1>
+
+      <p class="save-description">
+        下の画像を長押しして<br>
+        「写真に保存」を選択してください。
+      </p>
 
       <!--
-        この部分がA3で画像化されます
+        この画像がCanvasから生成されます。
+        ダウンロードボタンは使用しません。
       -->
-
-      <div id="result-card" class="result-card">
-
-        <div class="result-category">
-          <span id="result-letter">A</span>
-        </div>
-
-        <p class="result-label">
-          DIAGNOSIS RESULT
-        </p>
-
-        <h2 id="result-name">
-          あなたの診断結果
-        </h2>
-
-        <div class="result-score">
-
-          <span id="result-score">
-            85
-          </span>
-
-          <small>POINT</small>
-
-        </div>
-
-
-        <div class="result-line"></div>
-
-
-        <h3 id="result-title">
-          素晴らしい可能性を持っています
-        </h3>
-
-        <p id="result-description">
-          あなたには独自の魅力と可能性があります。
-          自分自身の感覚を大切にしながら、
-          あなたらしい道を進んでいくことで、
-          さらに大きな可能性が開いていくでしょう。
-        </p>
-
-
-        <div class="result-info">
-
-          <div>
-            <span>NAME</span>
-            <strong id="display-name">---</strong>
-          </div>
-
-          <div>
-            <span>TYPE</span>
-            <strong id="display-type">A</strong>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="button-area">
-
-        <button
-          class="primary-button"
-          onclick="goToImage()"
-        >
-          結果画像を作成する
-        </button>
-
-        <button
-          class="secondary-button"
-          onclick="showScreen('screen-input')"
-        >
-          入力画面に戻る
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
-         A3〜D3 画像保存画面
-    ========================== -->
-
-    <section id="screen-image" class="screen">
-
-      <div class="header">
-
-        <p class="step">STEP 3 / 3</p>
-
-        <h1>
-          <span id="image-category">A</span>3
-        </h1>
-
-        <h2>
-          結果画像を保存
-        </h2>
-
-        <p class="description">
-          診断結果を画像として保存できます
-        </p>
-
-      </div>
-
-
-      <div class="image-preview">
-
+      <div class="image-wrapper">
         <img
-          id="result-image"
-          alt="診断結果画像"
+          id="saveImage"
+          alt="星詠み研究所の診断結果"
         >
-
       </div>
 
+      <p class="save-help">
+        📱 iPhoneの場合<br>
+        画像を長押し →「写真に保存」
+      </p>
 
-      <div class="button-area">
+      <button
+        class="sub-button"
+        onclick="showPage(2)"
+      >
+        診断結果に戻る
+      </button>
 
-        <button
-          class="primary-button"
-          onclick="downloadImage()"
-        >
-          画像を保存する
-        </button>
+    </div>
 
-
-        <button
-          class="secondary-button"
-          onclick="showScreen('screen-result')"
-        >
-          A2に戻る
-        </button>
+  </section>
 
 
-        <button
-          class="text-button"
-          onclick="showScreen('screen-list')"
-        >
-          一覧に戻る
-        </button>
+  <!-- Canvasは画像生成用 -->
+  <canvas id="resultCanvas"></canvas>
 
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- html2canvas
-       A2の結果画面を画像にするために使用
-  -->
-
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-  </script>
 
   <script src="script.js"></script>
 
